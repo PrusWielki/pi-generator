@@ -15,6 +15,7 @@ struct resultstruct {
   mpz_class P, Q, T;
 };
 
+// constants are defiend by the Chudnovsky algorithm: https://en.wikipedia.org/wiki/Chudnovsky_algorithm
 namespace constants {
 
   const uint A = 640320,
