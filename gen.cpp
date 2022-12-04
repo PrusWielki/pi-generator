@@ -21,15 +21,12 @@ resultstruct binary_splitting(int a, int b, mpf_class C324){
      resultstruct result;
 
      if(1==b-a){
-        if(0==a){
-        result.P=1;
-        result.Q=1;}
-    else{
-        result.P= (6*a-5)*(2*a-1)*(6*a-1);
-        result.Q=a*a*a*C324;
-    }
-    result.T=result.P*(13591409 + 545140134*a);
-    if(a&1){ // check if a is even
+
+        result.P= (6*b-5)*(2*b-1)*(6*b-1);
+        result.Q=b*b*b*C324;
+    
+    result.T=result.P*(13591409 + 545140134*b);
+    if((b&1)==1){ // check if a is even
         result.T=-1*result.T;
     }
 
@@ -40,9 +37,9 @@ resultstruct binary_splitting(int a, int b, mpf_class C324){
         resultstruct result_a_m=binary_splitting(a,m,C324);
         resultstruct result_m_b=binary_splitting(m,b,C324);
 
-        result.P=result_a_m.P+result_m_b.P;
-        result.Q=result_a_m.Q+result_m_b.Q;
-        result.T=result_a_m.T*result_m_b.Q+result_m_b.T*result_a_m.Q;;
+        result.P=result_a_m.P*result_m_b.P;
+        result.Q=result_a_m.Q*result_m_b.Q;
+        result.T=result_a_m.T*result_m_b.Q+result_m_b.T*result_a_m.P;
 
 
 
