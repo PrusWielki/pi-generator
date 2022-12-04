@@ -10,10 +10,10 @@ using namespace std;
 
 struct resultstruct {
 
-    mpf_class P, Q ,T;
+    mpz_class P, Q ,T;
 };
 
-mpf_class C = 640320,C324 = C*C*C/24;
+mpz_class C = 640320,C324 = C*C*C/24;
 
 
 resultstruct binary_splitting(mpz_class a, mpz_class b){
@@ -85,11 +85,9 @@ int main(int argc, char** argv)
 
     
     mpf_class pi;
-    mpf_class sqrtC;
 
     pi=0;
     
-    sqrtC=sqrt(mpf_class(10005));
 
 
 
