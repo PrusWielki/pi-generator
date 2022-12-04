@@ -1,19 +1,26 @@
-#include<stdio.h>
-#include <stdlib.h>
-#include <cmath>
-#include <gmpxx.h>
-// #include <mpfr.h>
+#include <stdio.h>
+#include <cmath> // sqrt function
+#include <gmpxx.h> // allows for the usage of gmp arbitrary long precision numbers, and for the standard notation of formulas (e.g. a=b*c*d instead of bc=b*c, a=bc*d)
+// #include <mpfr.h> //mpfr proved to have no efficiency improvements over standard gmp
 // #include <mpf2mpfr.h>
-#include <chrono> 
+#include <chrono> // for time measurement
 
 using namespace std;
 
+
+// struct used for the return value of recursive binary_splitting function
 struct resultstruct {
 
     mpz_class P, Q ,T;
 };
 
-mpz_class C = 640320,C324 = C*C*C/24;
+namespace constants{
+
+const uint A = 640320,B = 13591409,C = 545140134,D = 426880,E = 13591409, F = 10005;
+
+}
+
+mpz_class C = constants::A,C324 = C*C*C/24;
 
 
 resultstruct binary_splitting(mpz_class a, mpz_class b){
@@ -39,7 +46,7 @@ gmp_printf ("C324: %Zd\n",C324);
 
         
     
-    result.T=result.P*(13591409 + 545140134*b);
+    result.T=result.P*(constants::B + constants::C*b);
     if((b&1)==1){ // check if a is even
         result.T=-1*result.T;
     }
@@ -94,10 +101,10 @@ int main(int argc, char** argv)
      resultstruct result = binary_splitting(0,iterations);
 
     
-     pi = 426880 * sqrt((mpf_class)10005)*result.Q;
+     pi = constants::D * sqrt((mpf_class)constants::F)*result.Q;
      
     // gmp_fprintf(stdout,"%d\n", pi);
-     pi /=(13591409*result.Q+result.T);
+     pi /=(constants::E*result.Q+result.T);
 
 
      // gmp_printf ("%Zd\n",result.T);
