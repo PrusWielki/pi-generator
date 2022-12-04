@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 
     mpf_t eq1, eq1_1, eq2, eq2_1, eq3, eq3_1;
 
-    mpf_inits(eq1, eq1_1, eq2, eq2_1, eq3, eq3_1, NULL);
+    mpf_inits(eq1, eq1_1, NULL);
 
 
     for(int i=0; i<number_of_iterations;i++)
@@ -44,20 +44,24 @@ int main(int argc, char** argv)
         // eq1_1 = 6*k
         // etc
 
-        // eq1
+        
         mpf_mul_ui(eq1_1,k,6);
         mpf_sub_ui(eq1,eq1_1,5);
         mpf_neg(eq1,eq1);
-        // eq2
-        mpf_mul_ui(eq2_1,k,2);
-        mpf_sub_ui(eq2,eq2_1,1);
-        // eq3
-        mpf_mul_ui(eq3_1,k,6);
-        mpf_sub_ui(eq3,eq3_1,1);
-        // a_k
+
+
         mpf_mul(a_k,a_k,eq1);
-        mpf_mul(a_k,a_k,eq2);
-        mpf_mul(a_k,a_k,eq3);
+        
+        mpf_mul_ui(eq1_1,k,2);
+        mpf_sub_ui(eq1,eq1_1,1);
+
+        mpf_mul(a_k,a_k,eq1);
+        
+        mpf_mul_ui(eq1_1,k,6);
+        mpf_sub_ui(eq1,eq1_1,1);
+        
+        mpf_mul(a_k,a_k,eq1);
+
 
 
         // a_k /= k*k*k*C324
@@ -86,8 +90,8 @@ int main(int argc, char** argv)
     // eq1 = 13591409*a_sum
     // eq2 = 545140134*b_sum
     mpf_mul_ui(eq1, a_sum, 13591409);
-    mpf_mul_ui(eq2, b_sum, 545140134);
-    mpf_add(total, eq1,eq2);
+    mpf_mul_ui(eq1_1, b_sum, 545140134);
+    mpf_add(total, eq1,eq1_1);
 
     // pi = (426880*sqrt(10005*one, one)*one) / total
     // eq1 = 426880*sqrt(10005)
@@ -105,13 +109,13 @@ int main(int argc, char** argv)
     if (f == NULL)
     {
         printf("Error opening file!\n");
-        mpf_clears(k, a_k, a_sum, b_sum,C, C3, C324, total, pi, eq1, eq1_1, eq2, eq2_1, eq3, eq3_1, NULL);
+        mpf_clears(k, a_k, a_sum, b_sum,C, C3, C324, total, pi, eq1, eq1_1, NULL);
         return 1;
     }
 
     gmp_fprintf(f,"%.*Ff", amount_of_numbers, pi);
 
 
-    mpf_clears(k, a_k, a_sum, b_sum,C, C3, C324, total, pi, eq1, eq1_1, eq2, eq2_1, eq3, eq3_1, NULL);
+    mpf_clears(k, a_k, a_sum, b_sum,C, C3, C324, total, pi, eq1, eq1_1, NULL);
     return 0;
 }
