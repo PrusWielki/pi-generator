@@ -20,9 +20,9 @@ int main(int argc, char** argv)
     int number_of_digits = atoi(argv[1]);
     // int amount_of_numbers= atoi(argv[3]);
 
-    int precision =  log2(15)*number_of_digits+1;
+    int precision =  log2(15)*(number_of_digits-2)+1;
 
-    int iterations = number_of_digits/14 +1;
+    int iterations = number_of_digits/14.18 +1;
 
     // printf("%d\n", precision);
 
