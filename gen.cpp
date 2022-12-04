@@ -4,6 +4,7 @@
 #include <gmp.h>
 // #include <mpfr.h>
 // #include <mpf2mpfr.h>
+#include <chrono> 
 
 using namespace std;
 
@@ -54,6 +55,7 @@ int main(int argc, char** argv)
     mpf_inits(eq1, eq1_1, NULL);
     
 
+    auto start = chrono::high_resolution_clock::now();
 
      for(int i=0; i<iterations;i++)
      // while(true)
@@ -142,6 +144,9 @@ int main(int argc, char** argv)
      gmp_fprintf(f,"%.*Ff", number_of_digits, pi);
      // mpfr_out_str (f, 10, 0, pi, MPFR_RNDD);
 
+    auto finish = chrono::high_resolution_clock::now();
+    chrono::duration<double> elapsed = finish - start;
+    printf("time: %f\n", elapsed.count());
 
     mpf_clears(k, a_k, a_sum, b_sum,C, C3, C324, total, pi, eq1, eq1_1, NULL);
     return 0;
