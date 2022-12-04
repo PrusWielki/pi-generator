@@ -29,6 +29,7 @@ namespace constants {
 // C324 is used by binary_splitting function, in order to avoid passing it in each call it'd declared as global
 mpz_class C = constants::A, C324 = C * C * C / 24;
 
+// Chudnovsky binary splitting adapted from: https://www.craig-wood.com/nick/articles/pi-chudnovsky/
 resultstruct binary_splitting(mpz_class a, mpz_class b) {
 
   mpz_class m;
@@ -45,7 +46,7 @@ resultstruct binary_splitting(mpz_class a, mpz_class b) {
     }
 
     result.T = result.P * (constants::B + constants::C * b);
-    if ((b & 1) == 1) { // check if a is even
+    if ((b & 1) == 1) { // check if b is even
       result.T = -1 * result.T;
     }
 
