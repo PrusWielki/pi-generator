@@ -1,24 +1,41 @@
 #include<stdio.h>
 #include <stdlib.h>
+#include <cmath>
 #include <gmp.h>
+// #include <mpfr.h>
+// #include <mpf2mpfr.h>
+
 using namespace std;
 
 int main(int argc, char** argv)
 {
-    if(argc<=3) {
-        printf("arg1=precision, arg2=number_of_iterations arg3=amount_of_numbers");
+    if(argc<=1) {
+        printf("arg1=number_of_digits");
         return 1;
      }
 
-    int precision = atoi(argv[1]);
-    int number_of_iterations = atoi(argv[2]);
-    int amount_of_numbers= atoi(argv[3]);
+    // int one = 1;
+
+    // int precision = atoi(argv[1]);
+    int number_of_digits = atoi(argv[1]);
+    // int amount_of_numbers= atoi(argv[3]);
+
+    int precision =  log2(15)*number_of_digits+1;
+
+    int iterations = number_of_digits/14 +1;
+
+    // printf("%d\n", precision);
+
 
     mpf_set_default_prec(precision);
 
     mpf_t k, a_k, a_sum, b_sum, C, C3,C324, total, pi;
 
     mpf_inits(k, a_k, a_sum, b_sum,C, C3, C324, total, pi, NULL);
+
+    mpf_set_ui(b_sum,0);
+    mpf_set_ui(total,0);
+    mpf_set_ui(pi,0);
 
     mpf_set_ui(k,1);
     mpf_set_ui(a_k,1);
@@ -27,6 +44,7 @@ int main(int argc, char** argv)
 
     mpf_pow_ui(C3,C,3);
     mpf_div_ui(C324,C3,24);
+    // mpf_floor(C324,C324);
 
 
 
@@ -34,10 +52,11 @@ int main(int argc, char** argv)
     mpf_t eq1, eq1_1, eq2, eq2_1, eq3, eq3_1;
 
     mpf_inits(eq1, eq1_1, NULL);
+    
 
 
-    for(int i=0; i<number_of_iterations;i++)
-        // while(true)
+     for(int i=0; i<iterations;i++)
+     // while(true)
         {
         // a_k *= -(6*k-5)*(2*k-1)*(6*k-1)
         // eq1 = -(6*k-5)
@@ -69,7 +88,7 @@ int main(int argc, char** argv)
         mpf_div(a_k,a_k,k);
         mpf_div(a_k,a_k,k);
         mpf_div(a_k,a_k,C324);
-
+        // mpf_floor(a_k,a_k);
 
         // a_sum += a_k
         mpf_add(a_sum,a_sum,a_k);
@@ -82,8 +101,14 @@ int main(int argc, char** argv)
         // k+=1
         mpf_add_ui(k,k,1);
 
-        if(0 == mpf_cmp_ui(a_k,0))
-            break;
+
+        // check if we achieved the desired accuracy
+        //  mpf_mul_ui(eq1,a_k,number_of_digits*number_of_digits);
+        //  gmp_printf ("%.*Ff\n", number_of_digits, eq1);
+        //  mpf_floor(eq1,eq1);
+        //  gmp_printf ("%.*Ff\n", number_of_digits, eq1);
+        //  if(0 == mpf_cmp_ui(eq1,0))
+        //     break;
 
     }
     // total = 13591409*a_sum + 545140134*b_sum
@@ -92,6 +117,7 @@ int main(int argc, char** argv)
     mpf_mul_ui(eq1, a_sum, 13591409);
     mpf_mul_ui(eq1_1, b_sum, 545140134);
     mpf_add(total, eq1,eq1_1);
+
 
     // pi = (426880*sqrt(10005*one, one)*one) / total
     // eq1 = 426880*sqrt(10005)
@@ -113,7 +139,8 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    gmp_fprintf(f,"%.*Ff", amount_of_numbers, pi);
+     gmp_fprintf(f,"%.*Ff", number_of_digits, pi);
+     // mpfr_out_str (f, 10, 0, pi, MPFR_RNDD);
 
 
     mpf_clears(k, a_k, a_sum, b_sum,C, C3, C324, total, pi, eq1, eq1_1, NULL);
