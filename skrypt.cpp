@@ -7,7 +7,7 @@ int main()
 {
     system("g++ -o main main.cpp");
     system("g++ -o main2 main2.cpp");
-    system("g++ -o gen gen.cpp -lgmp");
+    system("g++ -o gen gen.cpp -lgmp -lgmpxx");
     
     int i = 0;
 
