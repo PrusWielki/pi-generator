@@ -8,18 +8,9 @@
 
 using namespace std;
 
-int main(int argc, char** argv)
-{
-    if(argc<=1) {
-        printf("arg1=number_of_digits");
-        return 1;
-     }
+int binary_splitting(int number_of_digits){
 
-    // int one = 1;
 
-    // int precision = atoi(argv[1]);
-    int number_of_digits = atoi(argv[1]);
-    // int amount_of_numbers= atoi(argv[3]);
 
     int precision =  log2(15)*(number_of_digits-2)+1;
 
@@ -30,7 +21,7 @@ int main(int argc, char** argv)
 
     mpf_set_default_prec(precision);
 
-    mpf_t k, a_k, a_sum, b_sum, C, C3,C324, total, pi;
+    mpf_t C,C3,C324, a, b, Pab, Qab, Tab, m, Pam, Qam, Tam, Pmb, Qmb, Tmb, digits_per_term, N, P, Q, T, sqrtC;
 
     mpf_inits(k, a_k, a_sum, b_sum,C, C3, C324, total, pi, NULL);
 
@@ -55,7 +46,7 @@ int main(int argc, char** argv)
     mpf_inits(eq1, eq1_1, NULL);
     
 
-    auto start = chrono::high_resolution_clock::now();
+    
 
      for(int i=0; i<iterations;i++)
      // while(true)
@@ -124,6 +115,7 @@ int main(int argc, char** argv)
     // pi = (426880*sqrt(10005*one, one)*one) / total
     // eq1 = 426880*sqrt(10005)
     // eq1_1 = sqrt(10005)
+    
     mpf_sqrt_ui(eq1_1,10005);
     mpf_mul_ui(eq1,eq1_1, 426880);
     mpf_div(pi,eq1,total);
@@ -144,10 +136,34 @@ int main(int argc, char** argv)
      gmp_fprintf(f,"%.*Ff", number_of_digits, pi);
      // mpfr_out_str (f, 10, 0, pi, MPFR_RNDD);
 
+
+
+    mpf_clears(k, a_k, a_sum, b_sum,C, C3, C324, total, pi, eq1, eq1_1, NULL);
+
+
+
+}
+
+
+
+int main(int argc, char** argv)
+{
+    if(argc<=1) {
+        printf("arg1=number_of_digits");
+        return 1;
+     }
+
+    // int one = 1;
+    auto start = chrono::high_resolution_clock::now();
+    // int precision = atoi(argv[1]);
+    int number_of_digits = atoi(argv[1]);
+    // int amount_of_numbers= atoi(argv[3]);
+
+    binary_splitting(number_of_digits);
+
     auto finish = chrono::high_resolution_clock::now();
     chrono::duration<double> elapsed = finish - start;
     printf("time: %f\n", elapsed.count());
-
-    mpf_clears(k, a_k, a_sum, b_sum,C, C3, C324, total, pi, eq1, eq1_1, NULL);
+    
     return 0;
 }
