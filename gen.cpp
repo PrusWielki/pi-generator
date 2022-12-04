@@ -74,35 +74,35 @@ int main(int argc, char ** argv) {
 
   int number_of_digits = atoi(argv[1]);
 
-  double digits_per_iteration = 14.12; // log(53360^3) / log(10);
+  // Chudnovsky algorithm produces a little bit over 14.18 digits per iteration: https://mathoverflow.net/questions/261162/chudnovsky-algorithm-and-pi-precision
+  double digits_per_iteration = 14.18;
 
-  int precision = log2(15) * (number_of_digits - 2) + 1; // log2(10) *number_of_digits; //
+  // precision is the amount of bits that are going to be used to represent the obtained pi: https://math.stackexchange.com/questions/160295/how-many-bits-needed-to-store-a-number
+  int precision = log2(10) *number_of_digits; 
   int iterations = number_of_digits / digits_per_iteration + 1;
 
   mpf_set_default_prec(precision);
 
   mpf_class pi;
-
   pi = 0;
 
   resultstruct result = binary_splitting(0, iterations);
 
+
+
   pi = constants::D * sqrt((mpf_class) constants::F) * result.Q;
 
-  // gmp_fprintf(stdout,"%d\n", pi);
+
   pi /= (constants::E * result.Q + result.T);
 
-  // gmp_printf ("%Zd\n",result.T);
-  // gmp_printf ("Q: %Zd\n",result.Q);
 
-  FILE * f = fopen("file.txt", "w");
+  FILE * f = fopen("pi.txt", "w");
   if (f == NULL) {
     printf("Error opening file!\n");
     return 1;
   }
 
   gmp_fprintf(f, "%.*Ff", number_of_digits, pi);
-  // mpfr_out_str (f, 10, 0, pi, MPFR_RNDD);
 
   auto finish = chrono::high_resolution_clock::now();
   chrono::duration < double > elapsed = finish - start;
