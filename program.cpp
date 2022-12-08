@@ -115,7 +115,7 @@ int KMP(string digits, string pattern, int prefSuf[]){
 
 int main(int argc, char ** argv) {
   if (argc <= 4) {
-    printf("arg1=number_of_digits, arg2=range_lower_bound, arg3=range_upper_bound, arg4=file_name_to_save_pi");
+    printf("arg1=number_of_digits, arg2=range_lower_bound, arg3=range_upper_bound, arg4=file_name_to_save_pi, arg5=file_name_to_save_table");
     return 1;
   }
 
@@ -158,6 +158,34 @@ int main(int argc, char ** argv) {
   chrono::duration < double > elapsed = finish - start;
   printf("time: %f\n", elapsed.count());
 
+  // -------------------------------
+  // Generate table
+  
+  input.open(argv[4]); 
+  stringstream strStream;
+  strStream << input.rdbuf(); 
+  string digits = strStream.str(); 
+  digits= digits.substr(atoi(argv[2]),atoi(argv[3])-atoi(argv[2]));
+  int *prefSuf;
+  char str[10];
+
+  FILE * f2 = fopen(argv[5], "w");
+  if (f2 == NULL) {
+    printf("Error opening file!\n");
+    return 1;
+  }
+
+  for(int i =0; i<100;i++) {
+    sprintf(str, "%d", i);
+    *prefSuf = (int*)calloc(str.length() + 2,sizeof(int));
+    InitStrongPrefSuf(str,prefSuf);
+    fprintf(f2, "%d, %d\n", i ,KMP(digits,str,prefSuf));
+
+  }
+
+
+
+
   // ----------------------------------------------------------------
   // Pattern Searching
   ifstream input;
@@ -165,14 +193,9 @@ int main(int argc, char ** argv) {
   while(true){
     printf("Pattern: ");
 
-    input.open(argv[4]); 
-    stringstream strStream;
-    strStream << input.rdbuf(); 
-    string digits = strStream.str(); 
-    digits= digits.substr(atoi(argv[2]),atoi(argv[3])-atoi(argv[2]));
+    scanf( "%s" , pattern );
 
-    cin>>pattern;
-    int *prefSuf = (int*)calloc(pattern.length() + 2,sizeof(int));
+    *prefSuf = (int*)calloc(pattern.length() + 2,sizeof(int));
     InitStrongPrefSuf(pattern,prefSuf);
     printf("%d\n",KMP(digits,pattern,prefSuf));
   }
