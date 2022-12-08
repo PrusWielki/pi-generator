@@ -160,7 +160,8 @@ int main(int argc, char ** argv) {
 
   // -------------------------------
   // Generate table
-  
+  ifstream input;
+  string pattern;
   input.open(argv[4]); 
   stringstream strStream;
   strStream << input.rdbuf(); 
@@ -188,8 +189,6 @@ int main(int argc, char ** argv) {
 
   // ----------------------------------------------------------------
   // Pattern Searching
-  ifstream input;
-  string pattern;
   while(true){
     printf("Pattern: ");
 
@@ -199,6 +198,8 @@ int main(int argc, char ** argv) {
     InitStrongPrefSuf(pattern,prefSuf);
     printf("%d\n",KMP(digits,pattern,prefSuf));
   }
+
+  fclose(f2);
 
   return 0;
 }
