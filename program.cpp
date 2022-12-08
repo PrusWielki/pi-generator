@@ -178,7 +178,7 @@ int main(int argc, char ** argv) {
 
   for(int i =0; i<100;i++) {
     sprintf(str, "%d", i);
-    *prefSuf = (int*)calloc(str.length() + 2,sizeof(int));
+    prefSuf = (int*)calloc(10 + 2,sizeof(int));
     InitStrongPrefSuf(str,prefSuf);
     fprintf(f2, "%d, %d\n", i ,KMP(digits,str,prefSuf));
 
@@ -194,7 +194,7 @@ int main(int argc, char ** argv) {
 
     scanf( "%s" , pattern );
 
-    *prefSuf = (int*)calloc(pattern.length() + 2,sizeof(int));
+    prefSuf = (int*)calloc(pattern.length() + 2,sizeof(int));
     InitStrongPrefSuf(pattern,prefSuf);
     printf("%d\n",KMP(digits,pattern,prefSuf));
   }
