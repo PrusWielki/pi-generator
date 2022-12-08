@@ -167,21 +167,20 @@ int main(int argc, char ** argv) {
   strStream << input.rdbuf(); 
   string digits = strStream.str(); 
   digits= digits.substr(atoi(argv[2]),atoi(argv[3])-atoi(argv[2]));
-  int *prefSuf;
-  char str[10];
+  string str;
 
   FILE * f2 = fopen(argv[5], "w");
   if (f2 == NULL) {
     printf("Error opening file!\n");
     return 1;
   }
-
+  
   for(int i =0; i<100;i++) {
-    sprintf(str, "%d", i);
-    prefSuf = (int*)calloc(10 + 2,sizeof(int));
+    str =to_string(i);
+    int *prefSuf = (int*)calloc(str.length() + 2,sizeof(int));
     InitStrongPrefSuf(str,prefSuf);
-    fprintf(f2, "%d, %d\n", i ,KMP(digits,str,prefSuf));
-
+    fprintf(f2, "%d, %d\n", i, KMP(digits,str,prefSuf));
+    printf("%d, %d\n", i ,KMP(digits,str,prefSuf));
   }
 
 
@@ -189,14 +188,17 @@ int main(int argc, char ** argv) {
 
   // ----------------------------------------------------------------
   // Pattern Searching
+
   while(true){
     printf("Pattern: ");
 
-    scanf( "%s" , pattern );
+    cin>>pattern;
+    //pattern = "14";
+    //printf("Pattern: ");
 
-    prefSuf = (int*)calloc(pattern.length() + 2,sizeof(int));
-    InitStrongPrefSuf(pattern,prefSuf);
-    printf("%d\n",KMP(digits,pattern,prefSuf));
+    int *prefSuf2 = (int*)calloc(pattern.length() + 2,sizeof(int));
+    InitStrongPrefSuf(pattern,prefSuf2);
+    printf("%d\n",KMP(digits,pattern,prefSuf2));
   }
 
   fclose(f2);
