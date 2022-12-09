@@ -109,7 +109,26 @@ int KMP(string digits, string pattern, int prefSuf[]){
     return -1;
 }
 
+void DotRemoval(string filename){
 
+  ifstream input;
+  string pattern;
+  input.open(filename); 
+  stringstream strStream;
+  strStream << input.rdbuf(); 
+  string digits = strStream.str(); 
+  digits.erase(1,1);
+  input.close();
+
+  ofstream ofs;
+  ofs.open(filename, std::ofstream::out | std::ofstream::trunc);
+  
+  ofs <<digits;
+
+  ofs.close();
+
+
+}
 
 
 
@@ -153,6 +172,9 @@ int main(int argc, char ** argv) {
 
   gmp_fprintf(f, "%.*Ff", number_of_digits, pi);
   fclose(f);
+
+  DotRemoval(argv[4]);
+
 
   auto finish = chrono::high_resolution_clock::now();
   chrono::duration < double > elapsed = finish - start;
