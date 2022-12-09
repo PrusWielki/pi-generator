@@ -32,26 +32,18 @@ int main(int argc, char* argv[]){
     ofstream outputFile("cmpResults.txt");  
 
     string line1, line2;
+    char c1,c2;
     int i = 0;
 
-    while(getline(file1,line1)){
-        outputFile<<i<<" ";
-        if(!getline(file2,line2)){
-            outputFile << "LINES ARE DIFFERENT!" <<endl;
+    while(file1.good()&&file2.good()) {
+            file1.get(c1);
+            file2.get(c2);
+            if(c1!=c2){
+                outputFile<<"files differ at element: "<<i;
+                // cout<<"files differ at element: "<<i;
+            }
+            i++;
         }
-        if(line1 == line2){
-            outputFile << "OK"<<endl;
-        }
-        else{
-            outputFile << "LINES ARE DIFFERENT!" <<endl;
-        }
-
-        i++;
-    }
-    while(getline(file2,line2)){
-        outputFile << i << " LINES ARE DIFFERENT!" <<endl;
-        i++;
-    }
     file1.close();
     file2.close();
 
