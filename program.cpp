@@ -114,8 +114,8 @@ int KMP(string digits, string pattern, int prefSuf[]){
 
 
 int main(int argc, char ** argv) {
-  if (argc <= 4) {
-    printf("arg1=number_of_digits, arg2=range_lower_bound, arg3=range_upper_bound, arg4=file_name_to_save_pi, arg5=file_name_to_save_table");
+  if (argc <= 7) {
+    printf("arg1=number_of_digits, arg2=range_lower_bound, arg3=range_upper_bound, arg4=file_name_to_save_pi, arg5=file_name_to_save_table, arg6=function_lower_bound, arg7=function_upper_bound");
     return 1;
   }
 
@@ -175,13 +175,14 @@ int main(int argc, char ** argv) {
     return 1;
   }
   
-  for(int i =0; i<100;i++) {
+  for(int i =atoi(argv[6]); i<atoi(argv[7]);i++) {
     str =to_string(i);
     int *prefSuf = (int*)calloc(str.length() + 2,sizeof(int));
     InitStrongPrefSuf(str,prefSuf);
     fprintf(f2, "%d, %d\n", i, KMP(digits,str,prefSuf));
-    printf("%d, %d\n", i ,KMP(digits,str,prefSuf));
+    // printf("%d, %d\n", i ,KMP(digits,str,prefSuf));
   }
+  fclose(f2);
 
 
 
@@ -201,7 +202,6 @@ int main(int argc, char ** argv) {
     printf("%d\n",KMP(digits,pattern,prefSuf2));
   }
 
-  fclose(f2);
-
+  
   return 0;
 }
