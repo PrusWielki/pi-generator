@@ -201,7 +201,7 @@ int main(int argc, char ** argv) {
     str =to_string(i);
     int *prefSuf = (int*)calloc(str.length() + 2,sizeof(int));
     InitStrongPrefSuf(str,prefSuf);
-    fprintf(f2, "%d, %d\n", i, KMP(digits,str,prefSuf));
+    fprintf(f2, "%d,%d\n", i, KMP(digits,str,prefSuf));
     // printf("%d, %d\n", i ,KMP(digits,str,prefSuf));
   }
   fclose(f2);
