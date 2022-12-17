@@ -133,8 +133,8 @@ void DotRemoval(string filename){
 
 
 int main(int argc, char ** argv) {
-  if (argc <= 7) {
-    printf("arg1=number_of_digits, arg2=range_lower_bound, arg3=range_upper_bound, arg4=file_name_to_save_pi, arg5=file_name_to_save_table, arg6=function_lower_bound, arg7=function_upper_bound");
+  if (argc <= 8) {
+    printf("arg1=number_of_digits, arg2=range_lower_bound, arg3=range_upper_bound, arg4=file_name_to_save_pi, arg5=file_name_to_save_table, arg6=function_lower_bound, arg7=function_upper_bound, arg8=file_name_pi_generate_table");
     return 1;
   }
 
@@ -184,7 +184,7 @@ int main(int argc, char ** argv) {
   // Generate table
   ifstream input;
   string pattern;
-  input.open(argv[4]); 
+  input.open(argv[8]); 
   stringstream strStream;
   strStream << input.rdbuf(); 
   string digits = strStream.str(); 
