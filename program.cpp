@@ -23,7 +23,7 @@ struct resultstruct {
 // constants are defiend by the Chudnovsky algorithm: https://en.wikipedia.org/wiki/Chudnovsky_algorithm
 namespace constants {
 
-  const uint A = 640320,
+  const int A = 640320,
     B = 13591409,
     C = 545140134,
     D = 426880,
