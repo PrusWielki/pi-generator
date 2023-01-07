@@ -34,7 +34,7 @@ int main(int argc, char* argv[]){
     string line1, line2;
     char c1,c2;
     int i = 0;
-    outputFile<<"info: indexed from 1";
+    outputFile<<"info: indexed from 1"<<endl;
 
     while(file1.good()&&file2.good()) {
             file1.get(c1);
