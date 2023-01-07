@@ -147,7 +147,7 @@ int main(int argc, char ** argv) {
 
   // precision is the amount of bits that are going to be used to represent the obtained pi: https://math.stackexchange.com/questions/160295/how-many-bits-needed-to-store-a-number
   long precision = log2(10) *(number_of_digits+10); 
-  int iterations = number_of_digits / digits_per_iteration + 10;
+  long iterations = number_of_digits / digits_per_iteration + 10;
 
   mpf_set_default_prec(precision);
 
