@@ -170,7 +170,7 @@ int main(int argc, char ** argv) {
     return 1;
   }
 
-  gmp_fprintf(f, "%.*Ff", number_of_digits+2, pi);
+  gmp_fprintf(f, "%.*Ff", number_of_digits+1, pi);
   fclose(f);
 
   DotRemoval(argv[4]);
