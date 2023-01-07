@@ -146,8 +146,8 @@ int main(int argc, char ** argv) {
   double digits_per_iteration = 14;
 
   // precision is the amount of bits that are going to be used to represent the obtained pi: https://math.stackexchange.com/questions/160295/how-many-bits-needed-to-store-a-number
-  long precision = log2(10) *(number_of_digits+10); 
-  long iterations = number_of_digits / digits_per_iteration + 10;
+  long precision = log2(10) *(number_of_digits+3); 
+  long iterations = number_of_digits / digits_per_iteration + 2;
 
   mpf_set_default_prec(precision);
 
@@ -170,7 +170,7 @@ int main(int argc, char ** argv) {
     return 1;
   }
 
-  gmp_fprintf(f, "%.*Ff", number_of_digits, pi);
+  gmp_fprintf(f, "%.*Ff", number_of_digits+1, pi);
   fclose(f);
 
   DotRemoval(argv[4]);
