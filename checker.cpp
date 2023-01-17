@@ -34,13 +34,14 @@ int main(int argc, char* argv[]){
     string line1, line2;
     char c1,c2;
     int i = 0;
+    outputFile<<"info: indexed from 1"<<endl;
 
     while(file1.good()&&file2.good()) {
             file1.get(c1);
             file2.get(c2);
             if(c1!=c2){
-                outputFile<<"files differ at element: "<<i;
-                // cout<<"files differ at element: "<<i;
+                outputFile<<"files differ at element: "<<i+1<<endl;
+                // cout<<"files differ at element: "<<i+1<<endl;
             }
             i++;
         }
