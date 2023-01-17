@@ -209,21 +209,6 @@ int main(int argc, char ** argv) {
 
 
 
-  // ----------------------------------------------------------------
-  // Pattern Searching
-
-  while(true){
-    printf("Pattern: ");
-
-    cin>>pattern;
-    //pattern = "14";
-    //printf("Pattern: ");
-
-    int *prefSuf2 = (int*)calloc(pattern.length() + 2,sizeof(int));
-    InitStrongPrefSuf(pattern,prefSuf2);
-    printf("%d\n",KMP(digits,pattern,prefSuf2));
-  }
-
   
   return 0;
 }
