@@ -143,19 +143,21 @@ while(1){
   cin>>choice;
 switch(choice){
   case 1:
-
+{
 
 
 
   auto start = chrono::high_resolution_clock::now();
 
   int number_of_digits = 0;//atoi(argv[1]);
-  cout<"Write the number of digits you want to generate: ";
+  cout<<"Write the number of digits you want to generate: ";
   cin>>number_of_digits;
   cout<<"Enter file name to save pi to: ";
   string filename;
   cin>>filename;
-
+  const int filename_length = filename.length();
+  char* filename_array = new char[filename_length + 1];
+  strcpy(filename_array, filename.c_str());
   // Chudnovsky algorithm produces a little bit over 14.18 digits per iteration: https://mathoverflow.net/questions/261162/chudnovsky-algorithm-and-pi-precision
   double digits_per_iteration = 14;
 
@@ -177,8 +179,8 @@ switch(choice){
 
   pi /= (constants::E * result.Q + result.T);
 
-
-  FILE * f = fopen(filename, "w");
+  cout<<filename_array;
+  FILE * f = fopen(filename_array, "w");
   if (f == NULL) {
     printf("Error opening file!\n");
     return 1;
@@ -187,18 +189,20 @@ switch(choice){
   gmp_fprintf(f, "%.*Ff", number_of_digits+1, pi);
   fclose(f);
 
-  DotRemoval(filename);
+  DotRemoval(filename_array);
 
 
   auto finish = chrono::high_resolution_clock::now();
   chrono::duration < double > elapsed = finish - start;
-  printf("time: %f\n", elapsed.count());
+  printf("\ntime: %f\n", elapsed.count());
 
 
 
 
   break;
+}
   case 2:
+  {
   // -------------------------------
   // Generate table
   string tablefilename;
@@ -207,6 +211,14 @@ switch(choice){
   cin>>pifilename;
   cout<<"Provide file name to save table to: ";
   cin>>tablefilename;
+
+    const int pifilename_length = pifilename.length();
+  char* pifilename_array = new char[pifilename_length + 1];
+  strcpy(pifilename_array, pifilename.c_str());
+    const int tablefilename_length = tablefilename.length();
+  char* tablefilename_array = new char[tablefilename_length + 1];
+  strcpy(tablefilename_array, tablefilename.c_str());
+
 
   cout<<"Provide lowest argument, for example: 0: ";
   int lowerbound=0;
@@ -219,14 +231,14 @@ switch(choice){
 
   ifstream input;
   string pattern;
-  input.open(pifilename); 
+  input.open(pifilename_array); 
   stringstream strStream;
   strStream << input.rdbuf(); 
   string digits = strStream.str(); 
   // digits= digits.substr(atoi(argv[2]),atoi(argv[3])-atoi(argv[2]));
   string str;
 
-  FILE * f2 = fopen(tablefilename, "w");
+  FILE * f2 = fopen(tablefilename_array, "w");
   if (f2 == NULL) {
     printf("Error opening file!\n");
     return 1;
@@ -243,11 +255,11 @@ switch(choice){
 
 
   break;
-
-  case 3:
+  }
+  case 3:{
 
   exit(0);
-  break;
+  break;}
 }
   
 
