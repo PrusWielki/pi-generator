@@ -133,14 +133,28 @@ void DotRemoval(string filename){
 
 
 int main(int argc, char ** argv) {
-  if (argc <= 8) {
-    printf("arg1=number_of_digits, arg2=range_lower_bound, arg3=range_upper_bound, arg4=file_name_to_save_pi, arg5=file_name_to_save_table, arg6=function_lower_bound, arg7=function_upper_bound, arg8=file_name_pi_generate_table");
-    return 1;
-  }
+  //if (argc <= 8) {
+    //printf("arg1=number_of_digits, arg2=range_lower_bound, arg3=range_upper_bound, arg4=file_name_to_save_pi, arg5=file_name_to_save_table, arg6=function_lower_bound, arg7=function_upper_bound, arg8=file_name_pi_generate_table");
+    //return 1;
+  //}
+while(1){
+  cout<< "Choose from one of the options below:"<<endl<<"1. Generate PI"<<endl<<"2. Generate f_pi table"<<endl<<"3. Quit"<<endl<<"Choice: ";
+  int choice=0;
+  cin>>choice;
+switch(choice){
+  case 1:
+
+
+
 
   auto start = chrono::high_resolution_clock::now();
 
-  int number_of_digits = atoi(argv[1]);
+  int number_of_digits = 0;//atoi(argv[1]);
+  cout<"Write the number of digits you want to generate: ";
+  cin>>number_of_digits;
+  cout<<"Enter file name to save pi to: ";
+  string filename;
+  cin>>filename;
 
   // Chudnovsky algorithm produces a little bit over 14.18 digits per iteration: https://mathoverflow.net/questions/261162/chudnovsky-algorithm-and-pi-precision
   double digits_per_iteration = 14;
@@ -164,7 +178,7 @@ int main(int argc, char ** argv) {
   pi /= (constants::E * result.Q + result.T);
 
 
-  FILE * f = fopen(argv[4], "w");
+  FILE * f = fopen(filename, "w");
   if (f == NULL) {
     printf("Error opening file!\n");
     return 1;
@@ -173,31 +187,52 @@ int main(int argc, char ** argv) {
   gmp_fprintf(f, "%.*Ff", number_of_digits+1, pi);
   fclose(f);
 
-  DotRemoval(argv[4]);
+  DotRemoval(filename);
 
 
   auto finish = chrono::high_resolution_clock::now();
   chrono::duration < double > elapsed = finish - start;
   printf("time: %f\n", elapsed.count());
 
+
+
+
+  break;
+  case 2:
   // -------------------------------
   // Generate table
+  string tablefilename;
+  string pifilename;
+  cout<<"Provide file name of a file with pi: ";
+  cin>>pifilename;
+  cout<<"Provide file name to save table to: ";
+  cin>>tablefilename;
+
+  cout<<"Provide lowest argument, for example: 0: ";
+  int lowerbound=0;
+  cin>>lowerbound;
+  cout<<"Provide lowest argument, for example: 100: ";
+  int upperbound=0;
+  cin>>upperbound;
+
+
+
   ifstream input;
   string pattern;
-  input.open(argv[8]); 
+  input.open(pifilename); 
   stringstream strStream;
   strStream << input.rdbuf(); 
   string digits = strStream.str(); 
-  digits= digits.substr(atoi(argv[2]),atoi(argv[3])-atoi(argv[2]));
+  // digits= digits.substr(atoi(argv[2]),atoi(argv[3])-atoi(argv[2]));
   string str;
 
-  FILE * f2 = fopen(argv[5], "w");
+  FILE * f2 = fopen(tablefilename, "w");
   if (f2 == NULL) {
     printf("Error opening file!\n");
     return 1;
   }
   
-  for(int i =atoi(argv[6]); i<atoi(argv[7]);i++) {
+  for(int i =lowerbound; i<=upperbound;i++) {
     str =to_string(i);
     int *prefSuf = (int*)calloc(str.length() + 2,sizeof(int));
     InitStrongPrefSuf(str,prefSuf);
@@ -205,6 +240,22 @@ int main(int argc, char ** argv) {
     // printf("%d, %d\n", i ,KMP(digits,str,prefSuf));
   }
   fclose(f2);
+
+
+  break;
+
+  case 3:
+
+  exit(0);
+  break;
+}
+  
+
+}
+
+  
+
+
 
 
 
