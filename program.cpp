@@ -191,7 +191,6 @@ int main(int argc, char ** argv) {
   stringstream strStream;
   strStream << input.rdbuf(); 
   string digits = strStream.str(); 
-  digits= digits.substr(0,number_of_digits);
   string str;
 
   FILE * f2 = fopen(argv[3], "w");
