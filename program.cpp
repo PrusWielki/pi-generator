@@ -118,6 +118,7 @@ void DotRemoval(string filename){
   strStream << input.rdbuf(); 
   string digits = strStream.str(); 
   digits.erase(1,1);
+  digits.pop_back();   
   input.close();
 
   ofstream ofs;
@@ -133,14 +134,16 @@ void DotRemoval(string filename){
 
 
 int main(int argc, char ** argv) {
-  if (argc <= 8) {
-    printf("arg1=number_of_digits, arg2=range_lower_bound, arg3=range_upper_bound, arg4=file_name_to_save_pi, arg5=file_name_to_save_table, arg6=function_lower_bound, arg7=function_upper_bound, arg8=file_name_pi_generate_table");
+  if (argc <= 6) {
+    printf("arg1=number_of_digits, arg2=file_name_to_save_pi, arg3=file_name_to_save_table, arg4=pi_file_to_generate_table_from, arg5=f_pi_lowest_argument, arg6=f_pi_highest_argument");
     return 1;
   }
 
   auto start = chrono::high_resolution_clock::now();
 
   int number_of_digits = atoi(argv[1]);
+
+  if(number_of_digits >0){
 
   // Chudnovsky algorithm produces a little bit over 14.18 digits per iteration: https://mathoverflow.net/questions/261162/chudnovsky-algorithm-and-pi-precision
   double digits_per_iteration = 14;
@@ -164,7 +167,7 @@ int main(int argc, char ** argv) {
   pi /= (constants::E * result.Q + result.T);
 
 
-  FILE * f = fopen(argv[4], "w");
+  FILE * f = fopen(argv[2], "w");
   if (f == NULL) {
     printf("Error opening file!\n");
     return 1;
@@ -173,31 +176,31 @@ int main(int argc, char ** argv) {
   gmp_fprintf(f, "%.*Ff", number_of_digits+1, pi);
   fclose(f);
 
-  DotRemoval(argv[4]);
+  DotRemoval(argv[2]);
 
 
   auto finish = chrono::high_resolution_clock::now();
   chrono::duration < double > elapsed = finish - start;
   printf("time: %f\n", elapsed.count());
-
+  }
   // -------------------------------
   // Generate table
   ifstream input;
   string pattern;
-  input.open(argv[8]); 
+  input.open(argv[4]); 
   stringstream strStream;
   strStream << input.rdbuf(); 
   string digits = strStream.str(); 
-  digits= digits.substr(atoi(argv[2]),atoi(argv[3])-atoi(argv[2]));
+  digits= digits.substr(0,number_of_digits);
   string str;
 
-  FILE * f2 = fopen(argv[5], "w");
+  FILE * f2 = fopen(argv[3], "w");
   if (f2 == NULL) {
     printf("Error opening file!\n");
     return 1;
   }
   
-  for(int i =atoi(argv[6]); i<atoi(argv[7]);i++) {
+  for(int i =atoi(argv[5]); i<atoi(argv[6]);i++) {
     str =to_string(i);
     int *prefSuf = (int*)calloc(str.length() + 2,sizeof(int));
     InitStrongPrefSuf(str,prefSuf);
