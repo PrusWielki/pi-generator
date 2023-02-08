@@ -118,6 +118,7 @@ void DotRemoval(string filename){
   strStream << input.rdbuf(); 
   string digits = strStream.str(); 
   digits.erase(1,1);
+  digits.pop_back(); 
   input.close();
 
   ofstream ofs;
@@ -138,7 +139,7 @@ int main(int argc, char ** argv) {
     //return 1;
   //}
 while(1){
-  cout<< "Choose from one of the options below:"<<endl<<"1. Generate PI"<<endl<<"2. Generate f_pi table"<<endl<<"3. Quit"<<endl<<"Choice: ";
+  cout<< "Choose from one of the options below:"<<endl<<"1. Generate PI"<<endl<<"2. Generate f_pi table"<<endl<<"3. Compare two files"<<endl<<"4. Quit"<<endl<<"Choice: ";
   int choice=0;
   cin>>choice;
 switch(choice){
@@ -212,10 +213,10 @@ switch(choice){
   cout<<"Provide file name to save table to: ";
   cin>>tablefilename;
 
-    const int pifilename_length = pifilename.length();
+  const int pifilename_length = pifilename.length();
   char* pifilename_array = new char[pifilename_length + 1];
   strcpy(pifilename_array, pifilename.c_str());
-    const int tablefilename_length = tablefilename.length();
+  const int tablefilename_length = tablefilename.length();
   char* tablefilename_array = new char[tablefilename_length + 1];
   strcpy(tablefilename_array, tablefilename.c_str());
 
@@ -257,6 +258,54 @@ switch(choice){
   break;
   }
   case 3:{
+        cout<<"file name of the first file: ";
+        string filename1;
+        string filename2;
+        cin>>filename1;
+         cout<<"file name of the second file: ";
+  cin>>filename2;
+  string outputFileName;
+  cout<<"file name to output results: ";
+  cin>>outputFileName;
+
+    ifstream file1(filename1);
+    ifstream file2(filename2);
+
+    if(file1.fail()){
+        file1.close();
+        file2.close();
+        cout<<"Could not find file: " << argv[1]<<endl;
+        return 0;
+    }
+
+    if(file2.fail()){
+        file1.close();
+        file2.close();
+        cout<<"Could not find file: " << argv[2]<<endl;
+        return 0;
+    }
+
+    ofstream outputFile(outputFileName);  
+
+    string line1, line2;
+    char c1,c2;
+    int i = 0;
+    outputFile<<"info: postion is indexed from 1"<<endl;
+
+    while(file1.good()&&file2.good()) {
+            file1.get(c1);
+            file2.get(c2);
+            if(c1!=c2){
+                outputFile<<"files differ at element: "<<i+1<<endl;
+                // cout<<"files differ at element: "<<i+1<<endl;
+            }
+            i++;
+        }
+    file1.close();
+    file2.close();
+    break;
+}
+  case 4:{
 
   exit(0);
   break;}
