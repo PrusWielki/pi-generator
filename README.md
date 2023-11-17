@@ -1,7 +1,12 @@
-# Algorithms
+# Overview
 
-1. Opis algorytmow + pseudokod + zlozonosc
-1. Algorytm na znajdowanie substringa - Morris Pratt?
-2. Algorytm na generowanie PI - do znalezienia
-3. Utility - testy, sprawdzarka
+Program finds desired number of Pi digits.
+
+# How to compile
+
+`gcc main.c -o main -lgmp`
+
+# How to run 
+
+` ./main `
 
