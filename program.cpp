@@ -23,7 +23,7 @@ struct resultstruct {
 // constants are defiend by the Chudnovsky algorithm: https://en.wikipedia.org/wiki/Chudnovsky_algorithm
 namespace constants {
 
-  const uint A = 640320,
+  const int A = 640320,
     B = 13591409,
     C = 545140134,
     D = 426880,
@@ -109,26 +109,62 @@ int KMP(string digits, string pattern, int prefSuf[]){
     return -1;
 }
 
+void DotRemoval(string filename){
 
+  ifstream input;
+  string pattern;
+  input.open(filename); 
+  stringstream strStream;
+  strStream << input.rdbuf(); 
+  string digits = strStream.str(); 
+  digits.erase(1,1);
+  digits.pop_back(); 
+  input.close();
+
+  ofstream ofs;
+  ofs.open(filename, std::ofstream::out | std::ofstream::trunc);
+  
+  ofs <<digits;
+
+  ofs.close();
+
+
+}
 
 
 
 int main(int argc, char ** argv) {
-  if (argc <= 4) {
-    printf("arg1=number_of_digits, arg2=range_lower_bound, arg3=range_upper_bound, arg4=file_name_to_save_pi, arg5=file_name_to_save_table");
-    return 1;
-  }
+  //if (argc <= 8) {
+    //printf("arg1=number_of_digits, arg2=range_lower_bound, arg3=range_upper_bound, arg4=file_name_to_save_pi, arg5=file_name_to_save_table, arg6=function_lower_bound, arg7=function_upper_bound, arg8=file_name_pi_generate_table");
+    //return 1;
+  //}
+while(1){
+  cout<< "Choose from one of the options below:"<<endl<<"1. Generate PI"<<endl<<"2. Generate f_pi table"<<endl<<"3. Compare two files"<<endl<<"4. Quit"<<endl<<"Choice: ";
+  int choice=0;
+  cin>>choice;
+switch(choice){
+  case 1:
+{
+
+
 
   auto start = chrono::high_resolution_clock::now();
 
-  int number_of_digits = atoi(argv[1]);
-
+  int number_of_digits = 0;//atoi(argv[1]);
+  cout<<"Write the number of digits you want to generate: ";
+  cin>>number_of_digits;
+  cout<<"Enter file name to save pi to: ";
+  string filename;
+  cin>>filename;
+  const int filename_length = filename.length();
+  char* filename_array = new char[filename_length + 1];
+  strcpy(filename_array, filename.c_str());
   // Chudnovsky algorithm produces a little bit over 14.18 digits per iteration: https://mathoverflow.net/questions/261162/chudnovsky-algorithm-and-pi-precision
-  double digits_per_iteration = 14.18;
+  double digits_per_iteration = 14;
 
   // precision is the amount of bits that are going to be used to represent the obtained pi: https://math.stackexchange.com/questions/160295/how-many-bits-needed-to-store-a-number
-  long precision = log2(10) *number_of_digits; 
-  int iterations = number_of_digits / digits_per_iteration + 1;
+  long precision = log2(10) *(number_of_digits+3); 
+  long iterations = number_of_digits / digits_per_iteration + 2;
 
   mpf_set_default_prec(precision);
 
@@ -144,64 +180,147 @@ int main(int argc, char ** argv) {
 
   pi /= (constants::E * result.Q + result.T);
 
-
-  FILE * f = fopen(argv[4], "w");
+  cout<<filename_array;
+  FILE * f = fopen(filename_array, "w");
   if (f == NULL) {
     printf("Error opening file!\n");
     return 1;
   }
 
-  gmp_fprintf(f, "%.*Ff", number_of_digits, pi);
+  gmp_fprintf(f, "%.*Ff", number_of_digits+1, pi);
   fclose(f);
+
+  DotRemoval(filename_array);
+
 
   auto finish = chrono::high_resolution_clock::now();
   chrono::duration < double > elapsed = finish - start;
-  printf("time: %f\n", elapsed.count());
+  printf("\ntime: %f\n", elapsed.count());
 
+
+
+
+  break;
+}
+  case 2:
+  {
   // -------------------------------
   // Generate table
+  string tablefilename;
+  string pifilename;
+  cout<<"Provide file name of a file with pi: ";
+  cin>>pifilename;
+  cout<<"Provide file name to save table to: ";
+  cin>>tablefilename;
+
+  const int pifilename_length = pifilename.length();
+  char* pifilename_array = new char[pifilename_length + 1];
+  strcpy(pifilename_array, pifilename.c_str());
+  const int tablefilename_length = tablefilename.length();
+  char* tablefilename_array = new char[tablefilename_length + 1];
+  strcpy(tablefilename_array, tablefilename.c_str());
+
+
+  cout<<"Provide lowest argument, for example: 0: ";
+  int lowerbound=0;
+  cin>>lowerbound;
+  cout<<"Provide lowest argument, for example: 100: ";
+  int upperbound=0;
+  cin>>upperbound;
+
+
+
   ifstream input;
   string pattern;
-  input.open(argv[4]); 
+  input.open(pifilename_array); 
   stringstream strStream;
   strStream << input.rdbuf(); 
   string digits = strStream.str(); 
-  digits= digits.substr(atoi(argv[2]),atoi(argv[3])-atoi(argv[2]));
+  // digits= digits.substr(atoi(argv[2]),atoi(argv[3])-atoi(argv[2]));
   string str;
 
-  FILE * f2 = fopen(argv[5], "w");
+  FILE * f2 = fopen(tablefilename_array, "w");
   if (f2 == NULL) {
     printf("Error opening file!\n");
     return 1;
   }
   
-  for(int i =0; i<100;i++) {
+  for(int i =lowerbound; i<=upperbound;i++) {
     str =to_string(i);
     int *prefSuf = (int*)calloc(str.length() + 2,sizeof(int));
     InitStrongPrefSuf(str,prefSuf);
-    fprintf(f2, "%d, %d\n", i, KMP(digits,str,prefSuf));
-    printf("%d, %d\n", i ,KMP(digits,str,prefSuf));
+    fprintf(f2, "%d,%d\n", i, KMP(digits,str,prefSuf));
+    // printf("%d, %d\n", i ,KMP(digits,str,prefSuf));
   }
-
-
-
-
-  // ----------------------------------------------------------------
-  // Pattern Searching
-
-  while(true){
-    printf("Pattern: ");
-
-    cin>>pattern;
-    //pattern = "14";
-    //printf("Pattern: ");
-
-    int *prefSuf2 = (int*)calloc(pattern.length() + 2,sizeof(int));
-    InitStrongPrefSuf(pattern,prefSuf2);
-    printf("%d\n",KMP(digits,pattern,prefSuf2));
-  }
-
   fclose(f2);
 
+
+  break;
+  }
+  case 3:{
+        cout<<"file name of the first file: ";
+        string filename1;
+        string filename2;
+        cin>>filename1;
+         cout<<"file name of the second file: ";
+  cin>>filename2;
+  string outputFileName;
+  cout<<"file name to output results: ";
+  cin>>outputFileName;
+
+    ifstream file1(filename1);
+    ifstream file2(filename2);
+
+    if(file1.fail()){
+        file1.close();
+        file2.close();
+        cout<<"Could not find file: " << argv[1]<<endl;
+        return 0;
+    }
+
+    if(file2.fail()){
+        file1.close();
+        file2.close();
+        cout<<"Could not find file: " << argv[2]<<endl;
+        return 0;
+    }
+
+    ofstream outputFile(outputFileName);  
+
+    string line1, line2;
+    char c1,c2;
+    int i = 0;
+    outputFile<<"info: postion is indexed from 1"<<endl;
+
+    while(file1.good()&&file2.good()) {
+            file1.get(c1);
+            file2.get(c2);
+            if(c1!=c2){
+                outputFile<<"files differ at element: "<<i+1<<endl;
+                // cout<<"files differ at element: "<<i+1<<endl;
+            }
+            i++;
+        }
+    file1.close();
+    file2.close();
+    break;
+}
+  case 4:{
+
+  exit(0);
+  break;}
+}
+  
+
+}
+
+  
+
+
+
+
+
+
+  
   return 0;
 }
